@@ -1,0 +1,4 @@
+sudo apt-add-repository ppa:webupd8team/java
+sudo update-alternatives --list java
+
+synaptic instalar java-7-installer
