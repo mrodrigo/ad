@@ -27,6 +27,15 @@ namespace PHolaMysql
 			Console.WriteLine ("FieldCount={0}", mySqlDataReader.FieldCount);
 			for (int index = 0; index < mySqlDataReader.FieldCount; index++)
 				Console.WriteLine("Colum {0}={1}", index, mySqlDataReader.GetName (index));
+
+			while (mySqlDataReader.Read()) {
+				object id = mySqlDataReader ["id"];
+				object nombre = mySqlDataReader ["nombre"];
+				Console.WriteLine ("id={0} nombre={1}", id, nombre);
+						}
+
+			mySqlDataReader.Close ();
+
 			mySqlConnection.Close ();
 		}
 	}
