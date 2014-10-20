@@ -1,5 +1,8 @@
-using System;
 using Gtk;
+using MySql.Data.MySqlClient;
+using System;
+
+using SerpisAd;
 
 namespace PCategoria
 {
@@ -7,6 +10,11 @@ namespace PCategoria
 	{
 		public static void Main (string[] args)
 		{
+			App.Instance.DbConnection = new MySqlConnection (
+				"DataSource=localhost;Database=dbprueba;User ID=root;Password=sistemas"
+			);
+			App.Instance.DbConnection.Open ();
+
 			Application.Init ();
 			MainWindow win = new MainWindow ();
 			win.Show ();

@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{57BB87DA-840F-4F61-A04C-BFC6957E446B}</ProjectGuid>
+    <ProjectGuid>{E495854C-6DFB-4712-B798-13186F13607D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>PCategoria</RootNamespace>
-    <AssemblyName>PCategoria</AssemblyName>
+    <RootNamespace>PHolaGtk</RootNamespace>
+    <AssemblyName>PHolaGtk</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -57,14 +57,6 @@
       <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="Mono.Posix" />
-    <Reference Include="MySql.Data, Version=6.4.3.0, Culture=neutral, PublicKeyToken=20449f9ba87f7ae2">
-      <Private>False</Private>
-      <Package>mysql-connector-net</Package>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="PSerpisAd">
-      <HintPath>..\..\PSerpisAd\PSerpisAd\bin\Debug\PSerpisAd.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -77,8 +69,6 @@
     <Compile Include="gtk-gui\MainWindow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CategoriaView.cs" />
-    <Compile Include="gtk-gui\PCategoria.CategoriaView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
