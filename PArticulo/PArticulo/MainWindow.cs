@@ -8,7 +8,9 @@ using PArticulo;
 public partial class MainWindow: Gtk.Window
 {	
 	private IDbConnection dbConnection;
-	private ListStore listStore;
+
+	private ListStore listArticulos;
+	private ListStore listCategorias;
 
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
@@ -23,6 +25,7 @@ public partial class MainWindow: Gtk.Window
 
 		treeArticulos.Selection.Changed += selectionChanged;
 		treeCategorias.Selection.Changed += selectionChanged;
+
 	}
 	private void llamarArticulo(){
 		dbConnection = App.Instance.DbConnection;
@@ -32,8 +35,8 @@ public partial class MainWindow: Gtk.Window
 		treeArticulos.AppendColumn ("Categoria", new CellRendererText (), "text", 2);
 		treeArticulos.AppendColumn ("Precio", new CellRendererText (), "text", 3);
 
-		listStore = new ListStore (typeof(ulong),typeof(string),typeof(ulong),typeof(string));
-		treeArticulos.Model = listStore;
+		listArticulos = new ListStore (typeof(ulong),typeof(string),typeof(ulong),typeof(string));
+		treeArticulos.Model = listArticulos;
 		fillListArticulos ();
 
 	}
@@ -45,8 +48,8 @@ public partial class MainWindow: Gtk.Window
 		treeCategorias.AppendColumn ("Nombre", new CellRendererText (), "text", 1);
 
 
-		listStore = new ListStore (typeof(ulong),typeof(string));
-		treeCategorias.Model = listStore;
+		listCategorias= new ListStore (typeof(ulong),typeof(string));
+		treeCategorias.Model = listCategorias;
 		fillListCategorias ();
 	}
 
@@ -59,7 +62,7 @@ public partial class MainWindow: Gtk.Window
 			object nombre = dataReader ["nombre"];
 			object categoria = dataReader ["categoria"];
 			object precio = dataReader ["precio"].ToString (); ;
-			listStore.AppendValues (id, nombre, categoria, precio);
+			listArticulos.AppendValues (id, nombre, categoria, precio);
 		}
 		dataReader.Close ();
 	}
@@ -72,7 +75,7 @@ public partial class MainWindow: Gtk.Window
 			object id = dataReader ["id"];
 			object nombre = dataReader ["nombre"];
 
-			listStore.AppendValues (id, nombre);
+			listCategorias.AppendValues (id, nombre);
 		}
 		dataReader.Close ();
 	}
@@ -83,6 +86,7 @@ public partial class MainWindow: Gtk.Window
 		if (treeArticulos.Selection.CountSelectedRows () > 0) {
 			deleteAction.Sensitive = hasSelected;
 			editAction.Sensitive = hasSelected;
+
 		} else {
 			bool hasSelected2 = treeCategorias.Selection.CountSelectedRows () > 0;
 			deleteAction.Sensitive = hasSelected2;
@@ -90,10 +94,51 @@ public partial class MainWindow: Gtk.Window
 		}
 	}
 
+	protected void OnDeleteActionActivated (object sender, EventArgs e)
+	{
+		MessageDialog messageDialog = new MessageDialog (
+			this,
+			DialogFlags.Modal,
+			MessageType.Question,
+			ButtonsType.YesNo,
+			"¿Seguro que quieres borrar?"
+			);
+		messageDialog.Title = Title;
+		ResponseType response = (ResponseType) messageDialog.Run ();
+		messageDialog.Destroy ();
+		if (response != ResponseType.Yes)
+			return;
+		TreeIter treeIter;
+		string deleteSql = "";
+		if (notebook3.Page == 0) { //Si está elegida la pestaña Artículo (0)
+			Console.WriteLine ("Elegida pestaña "+ notebook3.Page.ToString());
+			treeArticulos.Selection.GetSelected (out treeIter);
+			object id = listArticulos.GetValue (treeIter, 0);
+			deleteSql = string.Format ("DELETE FROM articulo WHERE id={0}", id);
+			Console.WriteLine (deleteSql);
+		}
+		if (notebook3.Page == 1) { //Si está elegida la pestaña Categoria (1)
+			treeCategorias.Selection.GetSelected (out treeIter);
+			object id = listCategorias.GetValue (treeIter, 0);
+			deleteSql = string.Format ("DELETE FROM categoria WHERE id={0}", id);
+		}
+		IDbCommand dbCommand = dbConnection.CreateCommand ();
+		dbCommand.CommandText = deleteSql;
+		dbCommand.ExecuteNonQuery ();
+	}
+
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 	{
 		dbConnection.Close ();
 		Application.Quit ();
 		a.RetVal = true;
+	}
+
+	protected void OnRefreshActionActivated (object sender, EventArgs e)
+	{
+		listArticulos.Clear ();
+		listCategorias.Clear ();
+		fillListCategorias ();
+		fillListArticulos ();
 	}
 }
