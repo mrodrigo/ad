@@ -1,7 +1,7 @@
 using System;
 using Gtk;
 
-namespace PHolaGtk
+namespace PholaGtk
 {
 	class MainClass
 	{

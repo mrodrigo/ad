@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E495854C-6DFB-4712-B798-13186F13607D}</ProjectGuid>
+    <ProjectGuid>{32D760FE-05FD-4C6D-954B-99A24BDEE7B0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>PHolaGtk</RootNamespace>
-    <AssemblyName>PHolaGtk</AssemblyName>
+    <RootNamespace>PholaGtk</RootNamespace>
+    <AssemblyName>PholaGtk</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
